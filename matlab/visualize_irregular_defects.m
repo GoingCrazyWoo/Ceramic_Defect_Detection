@@ -25,6 +25,10 @@ function visualize_irregular_defects(imagePath, results, savePath)
     %% 创建可视化图形
     fig = figure('Position', [100, 100, 1800, 900], 'Visible', 'off');
     
+    % 设置中文字体支持
+    set(groot, 'defaultAxesFontName', 'Microsoft YaHei');
+    set(groot, 'defaultTextFontName', 'Microsoft YaHei');
+    
     % 定义颜色方案
     colors = struct(...
         'circular', [0, 1, 0], ...      % 绿色 - 圆形孔洞
@@ -35,7 +39,7 @@ function visualize_irregular_defects(imagePath, results, savePath)
     %% 子图1: 原始图像 + ROI
     subplot(2, 3, 1);
     imshow(img);
-    title('原始图像', 'FontSize', 12);
+    title('原始图像', 'FontSize', 12, 'FontName', 'Microsoft YaHei');
     if isfield(results, 'roiMask') && ~isempty(results.roiMask)
         hold on;
         % 绘制ROI边界
@@ -50,33 +54,33 @@ function visualize_irregular_defects(imagePath, results, savePath)
     %% 子图2: 增强图像
     subplot(2, 3, 2);
     imshow(results.enhanced);
-    title('CLAHE增强', 'FontSize', 12);
+    title('CLAHE增强', 'FontSize', 12, 'FontName', 'Microsoft YaHei');
     
     %% 子图3: ROI区域
     subplot(2, 3, 3);
     if isfield(results, 'roiMask') && ~isempty(results.roiMask)
         roiOverlay = imoverlay(mat2gray(grayImg), results.roiMask, [0, 1, 1]);
         imshow(roiOverlay);
-        title(sprintf('ROI检测 (%.1f%%)', sum(results.roiMask(:))/numel(results.roiMask)*100), 'FontSize', 12);
+        title(sprintf('ROI检测 (%.1f%%)', sum(results.roiMask(:))/numel(results.roiMask)*100), 'FontSize', 12, 'FontName', 'Microsoft YaHei');
     else
         imshow(grayImg);
-        title('无ROI', 'FontSize', 12);
+        title('无ROI', 'FontSize', 12, 'FontName', 'Microsoft YaHei');
     end
     
     %% 子图4: 缺陷掩码
     subplot(2, 3, 4);
     if isfield(results, 'binaryGlobalClean') && ~isempty(results.binaryGlobalClean)
         imshow(results.binaryGlobalClean);
-        title('缺陷掩码（二值化）', 'FontSize', 12);
+        title('缺陷掩码（二值化）', 'FontSize', 12, 'FontName', 'Microsoft YaHei');
     else
         imshow(grayImg);
-        title('无缺陷掩码', 'FontSize', 12);
+        title('无缺陷掩码', 'FontSize', 12, 'FontName', 'Microsoft YaHei');
     end
     
     %% 子图5: 不规则缺陷分类标注（彩色）
     subplot(2, 3, 5);
     imshow(img);
-    title('缺陷分类标注', 'FontSize', 12);
+    title('缺陷分类标注', 'FontSize', 12, 'FontName', 'Microsoft YaHei');
     hold on;
     
     if isfield(results, 'irregularDefects') && results.irregularDefects.count > 0
@@ -114,7 +118,7 @@ function visualize_irregular_defects(imagePath, results, savePath)
         end
     end
     if ~isempty(legend_entries)
-        legend(legend_entries, 'Location', 'northeast', 'FontSize', 9);
+        legend(legend_entries, 'Location', 'northeast', 'FontSize', 9, 'FontName', 'Microsoft YaHei');
     end
     
     %% 子图6: 统计信息
@@ -161,7 +165,7 @@ function visualize_irregular_defects(imagePath, results, savePath)
     
     % 显示文本
     text(0.1, 0.95, strjoin(statsText, '\n'), ...
-        'FontSize', 10, 'FontName', 'Courier New', ...
+        'FontSize', 10, 'FontName', 'Microsoft YaHei', ...
         'VerticalAlignment', 'top', 'Interpreter', 'none');
     
     %% 保存图片
