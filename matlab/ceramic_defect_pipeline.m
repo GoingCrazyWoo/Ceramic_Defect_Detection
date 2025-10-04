@@ -178,6 +178,7 @@ results.original = Igray;
 results.enhanced = enhanced;
 results.otsuGlobalLevel = levelGlobal;
 results.binaryGlobal = binaryGlobalClean;
+results.binaryGlobalClean = binaryGlobalClean;  % 添加此字段供可视化使用
 results.binaryLocal = binaryLocalClean;
 results.edgeMaps = edgeMaps;
 results.houghLines = lineData;

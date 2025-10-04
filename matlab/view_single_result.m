@@ -15,10 +15,33 @@ function view_single_result(imageName)
     runDir = runDirs(idx).name;
     fprintf('使用目录: %s\n', runDir);
     
-    % 加载结果
-    matFile = fullfile(runDir, 'results', sprintf('results_20250929_%s.mat', imageName));
-    if ~exist(matFile, 'file')
-        error('找不到结果文件: %s', matFile);
+    % 加载结果 - 自动查找匹配的文件
+    % 支持多种文件名格式：results_YYYYMMDD_imageName.mat 或 results_imageName.mat
+    resultsDir = fullfile(runDir, 'results');
+    
+    % 尝试多种文件名模式
+    possiblePatterns = {
+        sprintf('results_*_%s.mat', imageName),  % results_20250929_defect_01.mat
+        sprintf('results_%s.mat', imageName)      % results_defect_01.mat
+    };
+    
+    matFile = '';
+    for i = 1:length(possiblePatterns)
+        files = dir(fullfile(resultsDir, possiblePatterns{i}));
+        if ~isempty(files)
+            % 如果有多个匹配，取最新的
+            if length(files) > 1
+                [~, idx] = max([files.datenum]);
+                matFile = fullfile(resultsDir, files(idx).name);
+            else
+                matFile = fullfile(resultsDir, files(1).name);
+            end
+            break;
+        end
+    end
+    
+    if isempty(matFile)
+        error('找不到结果文件，尝试的模式: %s', strjoin(possiblePatterns, ', '));
     end
     
     load(matFile);
@@ -55,7 +78,24 @@ function view_single_result(imageName)
     
     % 创建可视化
     fprintf('\n【生成可视化】\n');
-    imgPath = fullfile('..', 'samples', sprintf('20250929_%s.jpg', imageName));
+    
+    % 自动查找原始图片 - 支持多种文件名格式
+    samplesDir = fullfile('..', 'samples');
+    possibleImgPatterns = {
+        sprintf('*_%s.jpg', imageName),      % 20250929_defect_01.jpg
+        sprintf('*_%s.png', imageName),      % 20250929_defect_01.png
+        sprintf('%s.jpg', imageName),        % defect_01.jpg
+        sprintf('%s.png', imageName)         % defect_01.png
+    };
+    
+    imgPath = '';
+    for i = 1:length(possibleImgPatterns)
+        files = dir(fullfile(samplesDir, possibleImgPatterns{i}));
+        if ~isempty(files)
+            imgPath = fullfile(samplesDir, files(1).name);
+            break;
+        end
+    end
     
     if ~exist(imgPath, 'file')
         fprintf('  ⚠ 找不到原始图片: %s\n', imgPath);
