@@ -1,0 +1,26 @@
+# MATLAB运行结果目录（自动生成）
+matlab/run_*/
+
+# MATLAB临时文件
+*.asv
+*.m~
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# MATLAB临时文件
+*.asv
+*.m~
+
+# IDE配置
+.idea/
+*.iml
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 注意：versions/ 目录不忽略，需要保存历史版本
